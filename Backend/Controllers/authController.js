@@ -88,28 +88,6 @@ const authcontroller = {
         }
     },
     
-    refresh: async (req, res) => {
-      const cookies = req.cookies;
-      if (!cookies?.jwt) {
-        return res.status(401).json({ message: 'Unauthorized' });
-      }
-      const refreshtoken = cookies.jwt;
-      try {
-        // Vérifiez le jeton de rafraîchissement
-        const decoded = jwt.verify(refreshtoken, process.env.REFRESH_TOKEN);
-        // Générez un nouveau jeton d'accès
-        const accessToken = jwt.sign(
-          { userId: decoded.userId }, // Remplacez userId par la valeur appropriée
-          process.env.ACCESS_TOKEN,
-          { expiresIn: '50min' }
-        );
-        res.json({ accessToken });
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ err: 'Erreur lors de la génération du jeton d\'accès' });
-      }
-    },
-    
     logout:async(req ,res)=>{
       res.cookie('jwt','',{
         httpOnly:true,
